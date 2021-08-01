@@ -5,8 +5,10 @@ class BondsStorage {
   }
 
   set bondsData(bData) {
-    this.data.set(this, bData);
-    this.lastUpdateTime = Date.now();
+    if (bData) {
+      this.data.set(this, bData);
+      this.lastUpdateTime = Date.now();
+    }
   }
 
   get bondsData() {
