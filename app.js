@@ -5,6 +5,12 @@ const workers = require('./src/workers/index');
 
 const server = express();
 server.use(helmet());
+server.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  next();
+});
 server.use('/', router);
 
 // start all workers
