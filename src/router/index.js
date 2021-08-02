@@ -1,11 +1,10 @@
 const express = require('express');
 const bondsRouter = require('./api/bonds');
+const { notFoundController } = require('../controllers');
 
 const router = express.Router();
 
 router.use('/api/bonds', bondsRouter);
-router.use((req, res) => {
-  res.status(404).send("Sorry can't find that!");
-});
+router.use(notFoundController);
 
 module.exports = router;
