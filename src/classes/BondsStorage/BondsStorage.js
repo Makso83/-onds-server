@@ -1,3 +1,5 @@
+const { formattedDateTime } = require('../../utils/mapBondsToStorage');
+
 class BondsStorage {
   constructor() {
     this.data = new WeakMap();
@@ -7,7 +9,7 @@ class BondsStorage {
   set bondsData(bData) {
     if (bData) {
       this.data.set(this, bData);
-      this.lastUpdateTime = Date.now();
+      this.lastUpdateTime = formattedDateTime(new Date());
     }
   }
 

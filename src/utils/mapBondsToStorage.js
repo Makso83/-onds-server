@@ -1,8 +1,12 @@
 const { differenceInCalendarDays } = require('date-fns');
+const { formatDistanceToNow } = require('date-fns');
 const { format } = require('date-fns');
+const ru = require('date-fns/locale/ru');
 
 const daysTillRefund = (bond) => differenceInCalendarDays(new Date(bond[13]), new Date());
 const calculateCoupons = (bond) => Math.floor(daysTillRefund(bond) / bond[15]) + 1;
+
+const formattedDateTime = (dateTime) => format(dateTime, 'dd.MM.yyyy HH:mm');
 
 const mapBondsToStorage = (rawResponse) => {
   const bonds = rawResponse?.securities?.data;
@@ -42,11 +46,12 @@ const mapBondsToStorage = (rawResponse) => {
         couponsLeft,
         profit,
         yearProfit,
-        daysTillEnd,
+        tillEnd: (new Date(bond[13])) ? formatDistanceToNow(new Date(bond[13]), { locale: ru }) : '-',
         duration,
       };
     })
     .filter((bond) => bond.profit > 0 && bond.yearProfit < 1);
 };
 
-module.exports = mapBondsToStorage;
+exports.mapBondsToStorage = mapBondsToStorage;
+exports.formattedDateTime = formattedDateTime;
