@@ -8,12 +8,19 @@ const calculateCoupons = (bond) => Math.floor(daysTillRefund(bond) / bond[15]) +
 
 const formattedDateTime = (dateTime) => format(dateTime, 'dd.MM.yyyy HH:mm');
 
+const filterBonds = (bond) => {
+  const isOFZ = bond[20].includes('ОФЗ');
+  const isValid = isOFZ ? bond[20].includes('ОФЗ-ПД') : true;
+  return bond[3] && bond[5] && bond[13] !== '0000-00-00' && bond[34] === 1 && isValid && bond[26] === 'SUR';
+};
+
 const mapBondsToStorage = (rawResponse) => {
   const bonds = rawResponse?.securities?.data;
   const marketData = rawResponse?.marketdata?.data;
   let matDate;
   let nextCoupon;
   return bonds
+    .filter(filterBonds)
     .map((bond) => {
       const fullPrice = (((+bond[8] * +bond[10]) / 100) + +bond[7]) * 1.00062;
       const couponsLeft = calculateCoupons(bond);
